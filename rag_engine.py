@@ -5,10 +5,33 @@ from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain_openai import OpenAI
 from dotenv import load_dotenv
+import gradio as gr
 import os 
 
 #Environment Variables
 load_dotenv()
+
+def ask_checkpoint(query):
+    return qa_chain.invoke(query)
+
+
+with gr.Blocks(theme="soft") as app:
+     
+     gr.Markdown(
+        """
+        ###  ⚖️ CHeckpoint AI - Cheaper than a lawyer. Speaks your language.
+        Your Swiss Tenant Rights Assistant. Ask me your questions! 
+        DISCLAIMER: CHeckpoint AI is a proof-of-concept tool intended for informational purposes only. It does not constitute legal advice and should not be relied upon as a substitute for consultation with a qualified legal professional. Always seek professional legal assistance when dealing with tenancy issues or legal disputes.Use of this tool is at your own discretion.
+
+        """)
+     
+     question = gr.Textbox(label="Your Question", placeholder="Can my landlord enter the house without prior notice?")
+     answer = gr.Textbox(label="Answer")
+
+     btn = gr.Button("Ask CHeckpoint")
+     btn.click(fn=ask_checkpoint, inputs=question, outputs=answer)
+
+app.launch(share=True)
 
 loader = DirectoryLoader('./data', glob='**/*.txt')
 docs = loader.load()
@@ -23,8 +46,3 @@ vectordb = Chroma.from_documents(chunks, embedding, persist_directory='./vectors
 retriever = vectordb.as_retriever()
 llm = OpenAI(temperature=0)
 qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever, chain_type="stuff")
-
-#Test query
-query = "Can my landlord enter my house without notice?"
-result = qa_chain.invoke(query)
-print(result)
