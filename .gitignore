@@ -1,1 +1,27 @@
+# Python stuff
+__pycache__/
+*.pyc 
+*.pyo 
+*.pyd
+
+#Virtual environments
 .env 
+.venv/
+venv/
+ENV/
+env/
+
+#Mac OS metadata
+.DS_Store
+
+#VSCode Settings
+.vscode/
+
+#Database/local indexes
+*.db 
+*.sqlite3 
+*.log 
+
+#Langchain/Chroma stuff
+chroma/ 
+
