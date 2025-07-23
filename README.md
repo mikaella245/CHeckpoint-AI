@@ -1,9 +1,9 @@
 # ⚖️ CHeckpoint AI
 > Cheaper than a lawyer. Speaks your language.
 
-An AI-powered legal assistant that helps tenants in Switzerland understand their rights, detect legal violations, and generate formal complaints — built with GPT-4, LangChain, and RAG.
-
 ## Description 
+
+An AI-powered legal assistant that helps tenants in Switzerland understand their rights, detect legal violations, and generate formal complaints — built with GPT-4, LangChain, and RAG.
 
 ## How it works
 
@@ -58,7 +58,7 @@ The app looks like this:
 
 ## Suggested prompts
 
-Seeing as CHeckpoint is currently trained in only three articles from the Swiss Code of Obligations - namely 257e, 257f and 266g - it can only answer questions relating to these artciles. Topics include security deposits, lanlord's right of entry, tenant obligations and early contract termination due to just notives.
+Seeing as CHeckpoint is currently trained in only three articles from the Swiss Code of Obligations - namely 257e, 257f and 266g - it can only answer questions relating to these artciles. Topics include security deposits, lanlord's right of entry, tenant obligations and early contract termination due to just motives.
 
 Here is a list of suggested prompts: 
 
