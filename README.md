@@ -1,5 +1,6 @@
 # ⚖️ CHeckpoint AI
 > Cheaper than a lawyer. Speaks your language.
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## Description 
 
@@ -18,6 +19,18 @@ CHeckpoint AI uses a Retrieval-Augmented Generation (RAG) pipeline powered by La
 The backend loads legal text documents, splits them into manageable chunks, embeds them into a vector database (Chroma), and allows the user to query this knowledge base using natural language. When a user submits a question, the app retrieves the most relevant context and passes it to a GPT-based model to generate a tailored response.
 
 A simple Gradio interface serves as the front end, enabling an interactive chat experience without requiring technical knowledge.
+
+### Tech-Stack:
+    •    Language: Python 3.9
+    •    Frontend: Gradio (https://www.gradio.app/) — lightweight UI for ML apps
+    •    Backend:
+    •    LangChain (https://www.langchain.com/) — framework for LLM pipelines
+    •    OpenAI GPT-4 (https://platform.openai.com/docs/models/gpt-4) — for generating legal answers
+    •    ChromaDB (https://www.trychroma.com/) — vector database for semantic search
+    •    Embeddings: text-embedding-ada-002 from OpenAI
+    •    Environment & Secrets: .env file with python-dotenv (https://pypi.org/project/python-dotenv/)
+    •    Version Control: Git + GitHub
+    •    Packaging: requirements.txt
 
 ## Setup
 
@@ -92,3 +105,7 @@ Intergrate prompt engineering, RAG, and fine-tuned LLMs to build a powerful, spe
   - Operating in multiple languages
   - Generating official documentation (e.g., complaint letters)
   - Potentially extend to broader legal domains like immigration, employment, and insurance law
+
+  ## Contact
+   You can find me on LinkedIn at:
+   www.linkedin.com/in/vasiliki-mikaela-sdona-718023364
