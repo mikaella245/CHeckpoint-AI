@@ -1,5 +1,6 @@
 # ⚖️ CHeckpoint AI
 > Cheaper than a lawyer. Speaks your language.
+
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## Description 
@@ -21,16 +22,16 @@ The backend loads legal text documents, splits them into manageable chunks, embe
 A simple Gradio interface serves as the front end, enabling an interactive chat experience without requiring technical knowledge.
 
 ### Tech-Stack:
-    •    Language: Python 3.9
-    •    Frontend: Gradio (https://www.gradio.app/) — lightweight UI for ML apps
-    •    Backend:
-    •    LangChain (https://www.langchain.com/) — framework for LLM pipelines
-    •    OpenAI GPT-4 (https://platform.openai.com/docs/models/gpt-4) — for generating legal answers
-    •    ChromaDB (https://www.trychroma.com/) — vector database for semantic search
-    •    Embeddings: text-embedding-ada-002 from OpenAI
-    •    Environment & Secrets: .env file with python-dotenv (https://pypi.org/project/python-dotenv/)
-    •    Version Control: Git + GitHub
-    •    Packaging: requirements.txt
+    •  Language: Python 3.9
+    •  Frontend: Gradio (https://www.gradio.app/) — lightweight  UI for ML apps
+    •  Backend:
+    •  LangChain (https://www.langchain.com/) — framework for LLM pipelines
+    •  OpenAI GPT-4 (https://platform.openai.com/docs/models/gpt-4) — for generating legal answers
+    •  ChromaDB (https://www.trychroma.com/) — vector database for semantic search
+    •  Embeddings: text-embedding-ada-002 from OpenAI
+    •  Environment & Secrets: .env file with python-dotenv (https://pypi.org/project/python-dotenv/)
+    •  Version Control: Git + GitHub
+    •  Packaging: requirements.txt
 
 ## Setup
 
