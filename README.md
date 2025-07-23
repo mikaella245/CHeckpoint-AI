@@ -71,15 +71,17 @@ Here is a list of suggested prompts:
 ## Roadmap
 This project is designed for iterative growth in the following three phases:
 
-Phase 1 - present: Build backend prototype using Retrieval-Augmented Generation (RAG)
+### Phase 1 - present: 
+Build backend prototype using Retrieval-Augmented Generation (RAG)
 
-Phase 2: 
-
+### Phase 2: 
 1. Expand dataset with multilingual legal sources and cantonal specificity
 2. Introduce fine-tuning on Swiss tenancy law (if early-stage support secured)
 3. Develop user-facing interface (chatbot, webapp, mobile support)
 
-Phase 3: Combine prompt engineering, RAG, and fine-tuned LLMs to build a powerful, specialized legal assistant capable of:
+### Phase 3: 
+Combine prompt engineering, RAG, and fine-tuned LLMs to build a powerful, specialized legal assistant capable of:
+
   - Understanding nuanced legal queries
   - Operating in multiple languages
   - Generating official documentation (e.g., complaint letters)
