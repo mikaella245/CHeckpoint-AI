@@ -46,7 +46,7 @@ The app will run on http://127.0.0.1:7860
 
 To generate a public Gradio link, set share=True in app.launch() in the script.
 
-![The app looks like this](screenshot.png)
+![The app looks like this](Screenshot.png)
 
 
 
