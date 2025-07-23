@@ -3,7 +3,13 @@
 
 ## Description 
 
-An AI-powered legal assistant that helps tenants in Switzerland understand their rights, detect legal violations, and generate formal complaints — built with GPT-4, LangChain, and RAG.
+An AI-powered legal assistant that helps tenants in Switzerland understand their rights, detect legal violations, and generate formal complaints. Built with GPT-4, LangChain, and RAG.
+
+Created to protect those most vulnerable to housing exploitation, which primarilly concerns students, expats and international hires, it serves as a characteristic example of technology for the benefit of society.
+
+### DISCLAIMER
+
+CHeckpoint AI is a proof-of-concept tool intended for informational purposes only. It does not constitute legal advice and should not be relied upon as a substitute for consultation with a qualified legal professional. Always seek professional legal assistance when dealing with tenancy issues or legal disputes.Use of this tool is at your own discretion.
 
 ## How it works
 
