@@ -5,7 +5,7 @@ An AI-powered legal assistant that helps tenants in Switzerland understand their
 
 ## Description 
 
-### How it works
+## How it works
 
 CHeckpoint AI uses a Retrieval-Augmented Generation (RAG) pipeline powered by LangChain, OpenAI’s embedding models, and Chroma for semantic search.
 
@@ -13,7 +13,7 @@ The backend loads legal text documents, splits them into manageable chunks, embe
 
 A simple Gradio interface serves as the front end, enabling an interactive chat experience without requiring technical knowledge.
 
-#### Setup
+## Setup
 
 1 - Clone the repository
 
@@ -46,11 +46,11 @@ The app will run on http://127.0.0.1:7860
 
 To generate a public Gradio link, set share=True in app.launch() in the script.
 
-![The app looks like this](Screenshot .png)
+![The app looks like this](Screenshot.png)
 
 
 
-##### Suggested prompts
+## Suggested prompts
 
 Seeing as CHeckpoint is currently trained in only three articles from the Swiss Code of Obligations - namely 257e, 257f and 266g - it can only answer questions relating to these artciles. Topics include security deposits, lanlord's right of entry, tenant obligations and early contract termination due to just notives.
 
@@ -62,7 +62,7 @@ Here is a list of suggested prompts:
 4) What are my obligations as a tenant?
 5) Can I terminate my contract early if my living conditions are intolerable?
 
-###### Roadmap
+## Roadmap
 This project is designed for iterative growth in the following three phases:
 
 Phase 1 - present: Build backend prototype using Retrieval-Augmented Generation (RAG)
