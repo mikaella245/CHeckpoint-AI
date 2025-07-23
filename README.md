@@ -5,7 +5,7 @@
 
 An AI-powered legal assistant that helps tenants in Switzerland understand their rights, detect legal violations, and generate formal complaints. Built with GPT-4, LangChain, and RAG.
 
-Created to protect those most vulnerable to housing exploitation, which primarilly concerns students, expats and international hires, it serves as a characteristic example of technology for the benefit of society.
+Created to protect those most vulnerable to housing exploitation, which primarily concerns students, expats and international hires, it serves as a characteristic example of technology for the benefit of society.
 
 ### DISCLAIMER
 
@@ -64,7 +64,7 @@ The app looks like this:
 
 ## Suggested prompts
 
-Seeing as CHeckpoint is currently trained in only three articles from the Swiss Code of Obligations - namely 257e, 257f and 266g - it can only answer questions relating to these artciles. Topics include security deposits, lanlord's right of entry, tenant obligations and early contract termination due to just motives.
+Seeing as CHeckpoint is currently trained in only three articles from the Swiss Code of Obligations - namely 257e, 257f and 266g - it can only answer questions relating to these articles. Topics include security deposits, lanlord's right of entry, tenant obligations and early contract termination due to just motives.
 
 Here is a list of suggested prompts: 
 
@@ -86,7 +86,7 @@ Build backend prototype using Retrieval-Augmented Generation (RAG)
 3. Develop user-facing interface (chatbot, webapp, mobile support)
 
 ### Phase 3: 
-Combine prompt engineering, RAG, and fine-tuned LLMs to build a powerful, specialized legal assistant capable of:
+Intergrate prompt engineering, RAG, and fine-tuned LLMs to build a powerful, specialized legal assistant capable of:
 
   - Understanding nuanced legal queries
   - Operating in multiple languages
