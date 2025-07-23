@@ -17,17 +17,19 @@ A simple Gradio interface serves as the front end, enabling an interactive chat 
 
 ### 1 - Clone the repository
 
-git clone https://github.com/your-username/CHeckpoint.git
-cd CHeckpoint
+``` git clone https://github.com/your-username/CHeckpoint.git
+    cd CHeckpoint 
+```
 
 ### 2 - Create and activate a virtual environment
 
-python3 -m venv venv
-source venv/bin/activate
+``` python3 -m venv venv
+    source venv/bin/activate
+```
 
 ### 3 - Install the required dependencies
 
-pip install -r requirements.txt
+``` pip install -r requirements.txt ```
 
 ### 4 - Add your API key
 
