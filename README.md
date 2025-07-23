@@ -15,32 +15,32 @@ A simple Gradio interface serves as the front end, enabling an interactive chat 
 
 ## Setup
 
-1 - Clone the repository
+### 1 - Clone the repository
 
 git clone https://github.com/your-username/CHeckpoint.git
 cd CHeckpoint
 
-2 - Create and activate a virtual environment
+### 2 - Create and activate a virtual environment
 
 python3 -m venv venv
 source venv/bin/activate
 
-3 - Install the required dependencies
+### 3 - Install the required dependencies
 
 pip install -r requirements.txt
 
-4 - Add your API key
+### 4 - Add your API key
 
 Create a .env file in the root directory.
 Add your OpenAI key like this:
 ``` python
 OPENAI_API_KEY=your_api_key_here
 ```
-5 - Run the app
+### 5 - Run the app
 
 python rag_engine.py
 
-6 - Access the UI
+### 6 - Access the UI
 
 The app will run on http://127.0.0.1:7860
 
