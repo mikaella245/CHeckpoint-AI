@@ -63,7 +63,7 @@ with gr.Blocks(theme="soft") as app:
      gr.Markdown(
         """
         ###  ⚖️ CHeckpoint AI - Cheaper than a lawyer. Speaks your language.
-       Your Swiss Tenant Rights Assistant. Ask me your questions! 
+       Your Swiss Tenant Rights Assistant. Ask me your questions! Now Mantis AI powered!
         DISCLAIMER: CHeckpoint AI is a proof-of-concept tool intended for informational purposes only. It does not constitute legal advice and should not be relied upon as a substitute for consultation with a qualified legal professional. Always seek professional legal assistance when dealing with tenancy issues or legal disputes.Use of this tool is at your own discretion.
 
         """)
