@@ -6,4 +6,3 @@ class RentInput(BaseModel):
     increase_year: int
     renovations: bool
     #renovation_type: str
-    inflation_rate: float

@@ -19,13 +19,12 @@
     #return templates.TemplateResponse("index.html", {"request": request})
 
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse
-from router import router
-import uvicorn
+from logic import calculate_faireness
+from models import RentInput 
 
 app = FastAPI()
-app.include_router(router, prefix = "/rent-calculator")
 
 @app.get("/", response_class=HTMLResponse)
 async def landing_page():
@@ -62,6 +61,16 @@ async def landing_page():
             section {
                 padding: 50px 20px;
             }
+            section .btn {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: white;
+                color: #007BFF;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+            }
             footer {
                 background-color: #333;
                 color: white;
@@ -88,23 +97,25 @@ async def landing_page():
         
         <section id="calculator-prompt">
         <h2>Want to know how affected you are?</h2>
-            <a href="#rent-calculator" class="btn">Rent Faireness Calculator</a
+            <a href="#rent-calculator" class="btn">Rent Faireness Calculator</a>
         </section>
 
         <section id="rent-calculator">
             <h2>Rent Calculator</h2>
-            <form method="post" action="/calculate"> <!-- make sure your router route is /calculate -->
+            <form method="post" action="/check_rent/calculate">
+                <label>Original Rent (CHF):
                 <input type="number" step="0.01" name="original_rent" placeholder="Original Rent (CHF)" required>
+                <label>Current Rent (CHF):
                 <input type="number" step="0.01" name="current_rent" placeholder="Current Rent (CHF)" required>
-                <input type="number" name="contract_year" placeholder="Contract Year" required>
-                <input type="number" name="increase_year" placeholder="Increase Year" required>
-                <label>Renovations:
-                    <select name="renovations">
-                        <option value="True">Yes</option>
-                        <option value="False">No</option>
-                    </select>
-                </label>
-                <input type="number" step="0.01" name="inflation_rate" placeholder="Inflation Rate (%)" required>
+                <label>Year the contract was signed:
+                <input type="number" name="contract_year" placeholder="Year" required>
+                <label>Year the increase took place:
+                <input type="number" name="increase_year" placeholder="Year" required>
+                <label>Were there any renovations done before the increase?:
+                <select name="renovations">
+                    <option value="True">Yes</option>
+                    <option value="False">No</option>
+                </select>
                 <button type="submit">Calculate</button>
             </form>
         </section>
@@ -115,11 +126,100 @@ async def landing_page():
     </body>
     </html>
     """
+@app.post("/check_rent/calculate")
+async def calculate_rent(
+    original_rent: float = Form(...),
+    current_rent: float = Form(...),
+    contract_year: int = Form(...),
+    increase_year: int = Form(...),
+    renovations: str = Form(...),
+):
+    
+    rent_data = RentInput(
+        original_rent=original_rent,
+        current_rent=current_rent,
+        contract_year=contract_year,
+        increase_year=increase_year,
+        renovations= True if renovations == "True" else False,
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("backend:app", host="127.0.0.1", port=8000, reload=True)
+    )
+    result = calculate_faireness(rent_data)
+    #total_max_rent = result["allowed_rent_estimate"]
+    #difference = result["difference"]
+    #evaluation = result["evaluation"]
 
+    return HTMLResponse(f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rent Fairness Result</title>
+        <style>
+           body {{
+               font-family: Arial, sans-serif;
+               margin: 0;
+               padding: 0;
+               background-color: #f2f2f2;
+               text-align: center;
+            }}
+             header {{
+               background-color: #007BFF;
+               color: white;
+               padding: 40px 0;
+            }}
+             header h1 {{
+               margin: 0;
+               font-size: 32px;
+            }}
+             section {{
+               padding: 40px 20px;
+            }}
+             .result-box {{
+                background-color: white;
+                max-width: 500px;
+                margin: auto;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }}
+             footer {{
+                background-color: #333;
+                color: white;
+                padding: 20px;
+            }}         
+            .btn {{
+                display: inline-block;
+                margin-top: 25px;
+                padding: 12px 25px;
+                background-color: #007BFF;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+            }}
+    </style>
+    </head>
 
+    <body>
 
+    <header>
+       <h1>Rent Fairness Result</h1>
+    </header>
 
+    <section>
+        <div class="result-box">
+
+           <p><strong>Maximum Allowed Rent Estimate:</strong> {result["allowed_rent_estimate"]} CHF</p>
+           <p><strong>Difference between Allowed and Current Rent:</strong> {result["difference"]} CHF</p>
+           <p><strong>Assessment:</strong> {result["assessment"]}</p>
+
+           <a href="/" class="btn">Back to Home</a>
+        </div>
+    </section>
+    <footer>
+            <p>&copy; 2025 CHeckpoint</p>
+    </footer>
+
+    </body>
+    </html>
+    """)
