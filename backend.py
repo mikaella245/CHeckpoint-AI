@@ -21,9 +21,11 @@
 
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from router import router
 import uvicorn
 
 app = FastAPI()
+app.include_router(router, prefix = "/rent-calculator")
 
 @app.get("/", response_class=HTMLResponse)
 async def landing_page():
@@ -66,17 +68,45 @@ async def landing_page():
                 padding: 20px;
             }
         </style>
+
+
     </head>
     <body>
         <header>
             <h1>CHeckpoint</h1>
-            <p>This is the first version of the prototype</p>
+            <p>Is rent one of the biggest expenses in your life? Do you live in constant fear of the next rent increase?</p>
+            <p>You are not alone.</p>
             <a href="#learn-more" class="btn">Learn More</a>
+    
         </header>
 
         <section id="learn-more">
-            <h2>About</h2>
-            <p>info about project.</p>
+            <h2>Learn More</h2>
+            <p>Did you know that Swiss tenants OVERpay an estimated 14 BILLION CHF in rent every year? This significant amount is mainly due to a lack of automatic adaptation 
+            of rents to the current taux de référence and abusive practices by some landlords.</p>
+        
+        
+        <section id="calculator-prompt">
+        <h2>Want to know how affected you are?</h2>
+            <a href="#rent-calculator" class="btn">Rent Faireness Calculator</a
+        </section>
+
+        <section id="rent-calculator">
+            <h2>Rent Calculator</h2>
+            <form method="post" action="/calculate"> <!-- make sure your router route is /calculate -->
+                <input type="number" step="0.01" name="original_rent" placeholder="Original Rent (CHF)" required>
+                <input type="number" step="0.01" name="current_rent" placeholder="Current Rent (CHF)" required>
+                <input type="number" name="contract_year" placeholder="Contract Year" required>
+                <input type="number" name="increase_year" placeholder="Increase Year" required>
+                <label>Renovations:
+                    <select name="renovations">
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                </label>
+                <input type="number" step="0.01" name="inflation_rate" placeholder="Inflation Rate (%)" required>
+                <button type="submit">Calculate</button>
+            </form>
         </section>
 
         <footer>
@@ -87,6 +117,9 @@ async def landing_page():
     """
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run("backend:app", host="127.0.0.1", port=8000, reload=True)
+
+
 
 
