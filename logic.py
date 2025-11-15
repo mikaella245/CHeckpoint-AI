@@ -6,6 +6,9 @@ def calculate_faireness(data: RentInput):
     contract_rate = get_reference_rate(data.contract_year)
     current_rate = get_reference_rate(data.increase_year)
 
+    # Allowed initial rent 
+    #allowed_initial_rent = 
+
     # Taux de référence
     rate_diff = current_rate - contract_rate
     hypo_adjust = rate_diff * 0.025 #Check if it's actual legal coeff
