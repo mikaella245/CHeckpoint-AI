@@ -34,7 +34,7 @@ async def landing_page():
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>CHeckpoint</title>
+        <title>CHeckpoint </title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -76,27 +76,74 @@ async def landing_page():
                 color: white;
                 padding: 20px;
             }
-        </style>
+            <style>
+            .faq-item {
+                margin-bottom: 15px;
+                border-radius: 8px;
+                background: #ffffff;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .faq-question {
+                 width: 100%;
+                 padding: 18px;
+                 border: none;
+                 background: #007BFF;
+                 color: #fff;
+                 text-align: left;
+                 font-size: 16px;
+                 font-weight: bold;
+                 cursor: pointer;
+                 outline: none;
+           }
+
+            .faq-answer {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                background: #fafafa;
+                padding: 0 18px;
+            }
+
+            .faq-answer p {
+                margin: 15px 0;
+            }
+    </style>
+
+    
+    
 
 
     </head>
     <body>
         <header>
-            <h1>CHeckpoint</h1>
-            <p>Is rent one of the biggest expenses in your life? Do you live in constant fear of the next rent increase?</p>
-            <p>You are not alone.</p>
+            <h1>CHeckpoint ⚖️</h1>
+            <h2>Contesting your rent does not have to be painful. </h2>
             <a href="#learn-more" class="btn">Learn More</a>
     
         </header>
 
         <section id="learn-more">
             <h2>Learn More</h2>
-            <p>Did you know that Swiss tenants OVERpay an estimated 14 BILLION CHF in rent every year? This significant amount is mainly due to a lack of automatic adaptation 
-            of rents to the current taux de référence and abusive practices by some landlords.</p>
+            <h3> You deserve to feel confident, not lost when dealing with rent, landlords, and régies.</h3>
+            <p>CHeckpoint helps you understand your rights clearly, calmly, and without legal jargon. Just facts that finally make sense.
+            Most tenants don't realise how much power they actually have or often that they're paying more than they should. With CHeckpoint 
+            you get clarity, support and the confidence to make informed decisions about your home. </p>
+
+            <p>It's not about starting a fight (and it never was).</p>
+            <h4>It's about finally feeling in control </h4>
+
+            <p>Wether you're wondering if your rent is fair, confused by your régie's latest letter, or just want to know what you can ask for</p>
+            <h4>this is a safe place to explore your options and take informed action. </h4>
+            <a href="#faq" class="btn"> Frequently Asked Questions</a>
         
-        
+        <section id="quiz-prompt">
+        <h2>Think you know your tenant rights? Take the quiz to find out! </h2>
+        <a href="/quiz" class="btn">Take the Quiz</a>
+
         <section id="calculator-prompt">
-        <h2>Want to know how affected you are?</h2>
+        <h2>Calculate how much you might be overpaying</h2>
             <a href="#rent-calculator" class="btn">Rent Faireness Calculator</a>
         </section>
 
@@ -119,13 +166,112 @@ async def landing_page():
                 <button type="submit">Calculate</button>
             </form>
         </section>
+        
+        <section id="faq" style="padding: 50px 20px; max-width: 800px; margin: auto;">
+            <h2 style="text-align:center; margin-bottom: 30px;">Frequently Asked Questions</h2>
 
+            <div class="faq-item">
+                 <button class="faq-question">What is CHeckpoint?</button>
+                <div class="faq-answer">
+                  <p>CHeckpoint is a tool that simplifies Swiss tenancy law so both tenants and landlords know exactly what they can and cannot do. This is a first prototype!</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">When is a rent abusive?</button>
+                <div class="faq-answer">
+                   <p> Abusive is any rent that exceeds more than 15% the rent required for similar houses. The comparison crtiteria in particular are the placement, the surface, the state, the equipement and the age of the house. (CO Art. 269)</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">In which cases is a rent increase invalid?</button>
+                <div class="faq-answer">
+                    <p>A rent increase is invalid if:</p>
+                    <p> a. It was not communicated using the official form determined by the canton.</p>
+                    <p> b. The motive for the increase is not stated. Meaning the landlord did not clarify why they are raising the rent.</p>
+                    <h4> c. It was accompanied by a termination or threat of termination if the tenant does not accept the increase. </h4><p> Meaning that it is ILLEGAL for a landlord to threaten a tenant with eviction if they do not accept a rent increase. (CO Art. 269g)</p>
+                </div>
+            </div>
+
+        
+        </section>
+        <script>
+        const questions = document.querySelectorAll('.faq-question');
+
+        questions.forEach(btn => {
+            btn.addEventListener('click', () => {
+                 const answer = btn.nextElementSibling;
+
+                if (answer.style.maxHeight) {
+                    answer.style.maxHeight = null;
+                } else {
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                }
+            });
+        });
+        </script>
         <footer>
             <p>&copy; 2025 CHeckpoint</p>
         </footer>
     </body>
     </html>
     """
+
+@app.get("/quiz", response_class=HTMLResponse)
+async def quiz_page():
+    
+    return """
+    <html>
+    <head>
+        <title>Tenant Quiz</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background: #f2f2f2;
+            }
+
+            .quiz-container {
+                display: flex;
+                justify-content: center;
+                padding: 40px 10px;
+            }
+
+            iframe {
+                width: 100%;
+                max-width: 720px;   
+                height: 900px;      
+                border: none;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+
+            a.back {
+                display: block;
+                margin: 20px auto;
+                text-align: center;
+                color: #007BFF;
+                text-decoration: none;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="quiz-container">
+            <iframe 
+                src="https://docs.google.com/forms/d/e/1FAIpQLSfLYzuZa4CNPm5J8D6NVvjTZ8UbTnZXP_UrpT79Z6H49cbUhQ/viewform?embedded=true"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <a href="/" class="back">⬅ Back to Home</a>
+    </body>
+    </html>
+    """
 @app.post("/check_rent/calculate")
 async def calculate_rent(
     original_rent: float = Form(...),
@@ -213,6 +359,13 @@ async def calculate_rent(
            <p><strong>Difference between Allowed and Current Rent:</strong> {result["difference"]} CHF</p>
            <p><strong>Assessment:</strong> {result["assessment"]}</p>
 
+           <h3> What are my options? </h3>
+              <p> If you believe your rent is unfair you can contest it in the 30 days from getting your keys or in the 30 days after an increase is comminicated.</p>
+              <p> You can do this by sending a letter to your régie or landlord explaining why you believe the rent is unfair. </p>
+              <p> Use our AI powered letter generator to help you write a legally-backed letter adapted to your situation. </p>
+              <h4>Contesting your rent has never been this quick and easy. (comming soon)</h4>
+              <p> Want to know more about how to contest your rent? Do you have other questions?</p>
+             <h4> Our chatbot CHarly has the answer for you. (comming soon)</h4> 
            <a href="/" class="btn">Back to Home</a>
         </div>
     </section>
