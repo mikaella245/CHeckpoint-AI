@@ -1,4 +1,4 @@
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 from dotenv import load_dotenv
 from pathlib import Path
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
@@ -8,9 +8,10 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_classic.chains.retrieval_qa.base import RetrievalQA
 from langchain_classic.docstore.document import Document
-from langchain_classic.prompts import PromptTemplate
-import time
+from langchain_classic.prompts import PromptTemplate 
+from pydantic import BaseModel
 import os
+import asyncio
 
 load_dotenv()
 
@@ -19,30 +20,33 @@ RENT_KEYWORDS = ["loyer", "bail", "augmentation", "révision", "loyers", "resili
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
-def scrape_asloca_articles():
+async def scrape_asloca_articles():
     articles = []
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.goto(f"{BASE_URL}/actualites")
-        time.sleep(2)
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(f"{BASE_URL}/actualites")
+        await asyncio.sleep(2)
 
         # Grab all article links under /actualites/
-        links = page.query_selector_all("a[href^='/actualites/']")
+        links = await page.query_selector_all("a[href^='/actualites/']")
         article_urls = set()
         for link in links:
-            href = link.get_attribute("href")
+            href = await link.get_attribute("href")
             if href != "/actualites":
                 article_urls.add(BASE_URL + href)
 
         # Visit each article
         for url in article_urls:
-            page.goto(url)
-            time.sleep(1)
-            title = page.query_selector("h1").inner_text() if page.query_selector("h1") else ""
-            paragraphs = page.query_selector_all("article p")
-            content = "\n".join([p.inner_text() for p in paragraphs])
+            await page.goto(url)
+            await asyncio.sleep(1)
+            h1_element = await page.query_selector("h1")
+            if h1_element:
+                title = await h1_element.inner_text()
+            else:
+                title = ""
+            paragraphs = await page.query_selector_all("article p")
+            content = "\n".join([await p.inner_text() for p in paragraphs])
 
             # Minimal filter: keep only if title or content has rent keywords
             if any(keyword.lower() in title.lower() or keyword.lower() in content.lower() for keyword in RENT_KEYWORDS):
@@ -52,23 +56,19 @@ def scrape_asloca_articles():
                     "content": content
                 })
 
-        browser.close()
+        await browser.close()
         
     return articles
-   
-articles = scrape_asloca_articles()
-def process_scraped_articles(articles, text_splitter):
-    scraped_docs = [
-        Document(
-            page_content=a["content"],
-            metadata={"title": a["title"], "url": a["url"]}
-        ) 
+
+async def main():
+  articles = await scrape_asloca_articles()
+  split_scraped_docs = text_splitter.split_documents([
+      Document(page_content=a["content"], metadata={"title": a["title"], "url": a["url"]})
         for a in articles
-    ]
+  ])
+  return split_scraped_docs
 
-    return text_splitter.split_documents(scraped_docs)
-
-split_scraped_docs = process_scraped_articles(articles, text_splitter)
+split_scraped_docs = []
 
 #if __name__ == "__main__":
 #    data = scrape_asloca_articles()
@@ -97,6 +97,7 @@ You are an expert Swiss tenant assistant. Your name is CHarly.
 Use the following context from Asloca articles and PDFs to answer questions about rent, tenant rights, and fairness.
 Be human, clear, concise, friendly, and empowering — you're the big sister who helps tenants stand up for themselves.
 The utmost goal of your answers is to calm and empower tenants, so that they contest their rent.
+Don't ever say "standing up for your rights can be empowering". It is unatural. Don't use "--" in your answers.
 Answer in English.
 
 Context:
@@ -115,6 +116,7 @@ qa_chain = RetrievalQA.from_chain_type(
     chain_type_kwargs={"prompt": prompt_template}
 )
 
-query = "Can I contest my rent?"
-answer = qa_chain.invoke(query)
-print(answer)
+#query = "Can I contest my rent?"
+#answer = qa_chain.invoke(query)
+#print(answer)
+

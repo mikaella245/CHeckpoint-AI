@@ -19,11 +19,14 @@
     #return templates.TemplateResponse("index.html", {"request": request})
 
 
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, Body
 from fastapi.responses import HTMLResponse
 from logic import calculate_faireness
 from models import RentInput 
-
+from pydantic import BaseModel
+import rag_pipeline
+from langchain_classic.chains.retrieval_qa.base import RetrievalQA
+from rag_pipeline import qa_chain, split_scraped_docs, main
 app = FastAPI()
 
 @app.get("/", response_class=HTMLResponse)
@@ -166,6 +169,10 @@ async def landing_page():
                 <button type="submit">Calculate</button>
             </form>
         </section>
+         
+        <section id="CHarly-prompt">
+        <h2> Confused about your rights? Our chatbot CHarly has your back! </h2>
+        <a href="/CHarly/chat" class="btn">Try CHarly now</a>
         
         <section id="faq" style="padding: 50px 20px; max-width: 800px; margin: auto;">
             <h2 style="text-align:center; margin-bottom: 30px;">Frequently Asked Questions</h2>
@@ -365,7 +372,8 @@ async def calculate_rent(
               <p> Use our AI powered letter generator to help you write a legally-backed letter adapted to your situation. </p>
               <h4>Contesting your rent has never been this quick and easy. (comming soon)</h4>
               <p> Want to know more about how to contest your rent? Do you have other questions?</p>
-             <h4> Our chatbot CHarly has the answer for you. (comming soon)</h4> 
+             <h4> Our chatbot CHarly has the answer for you.</h4> 
+             <a href="/CHarly/chat" class="btn">Try CHarly now!</a>
            <a href="/" class="btn">Back to Home</a>
         </div>
     </section>
@@ -376,3 +384,193 @@ async def calculate_rent(
     </body>
     </html>
     """)
+
+    
+#from fastapi.responses import HTMLResponse
+#class ChatRequest(BaseModel):
+#    question: str
+
+@app.get("/CHarly/chat", response_class=HTMLResponse)
+async def chat_page():
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat with CHarly</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #e0f7fa, #80deea);
+                height: 100vh;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+            }
+           
+            #chat-container {
+                display: flex;
+                flex-direction: column;
+                margin-top: 30px;
+                width: 100%;
+                max-width: 600px;
+                background: white;
+                padding: 20px;
+                border-radius: 40px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }          
+            #chat-box {
+                margin-top: 50px;
+                max-height: 400px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 15px;
+                background: #f9f9f9;
+            }
+            .message {
+                padding: 10px 15px;
+                border-radius: 15px;
+                margin: 5px 0;
+                max-width: 80%;
+                word-wrap: break-word;
+            }
+            .user { 
+                background: #007BFF;
+                color: white;
+                align-self: flex-end;
+                
+            }
+            .charly { 
+                background: #e0f7fa;
+                color: #006064;
+                
+            }
+            #input-section {
+                gap: 10px;
+                display: flex;
+
+            }
+            #question {
+                flex-grow: 1;
+                padding: 10px 15px;
+                border-radius: 20px;
+                border: 1px solid #ccc;
+                outline: none;
+            }
+            button {
+                background: #007BFF;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            button:hover {
+                background: #0056b3;
+            }
+            .btn {
+                border: none;
+                display: inline-block;
+                margin-top: auto;
+                margin-bottom: 10px;
+                padding: 10px 15px;
+                background-color: #007BFF;
+                color: white;
+                text-decoration: none;
+                border-radius: 3px;
+                font-weight: bold;
+            }
+            footer {
+            width: 100%;
+            margin-bottom: 0;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            align-items: stretch;
+            }
+            .thinking {
+                font-style: italic;
+                color: #555;
+                margin: 5px 0;
+                max-width: 80%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="chat-container">
+            <h2 style="text-align:center; color:#006064;">Chat with CHarly</h2>
+            <div id="chat-box"></div>
+            <div id="input-section">
+                <input id="question" placeholder="Ask about your rent, rights, increases…" />
+                <button onclick="ask()">Send</button>
+            </div>
+    </div>
+    <a href="/" class="btn">⬅ Back to Home</a>
+        
+        
+    <footer>
+        <p>&copy; 2025 CHeckpoint</p>
+    </footer>
+
+
+        <script>
+            async function ask() {
+                const question = document.getElementById("question").value;
+                if (!question) return;
+
+                const chatBox = document.getElementById("chat-box");
+
+                // show user's message
+                const userMsg = document.createElement("div");
+                userMsg.className = "message user";
+                userMsg.innerText = question;
+                chatBox.appendChild(userMsg);
+
+                document.getElementById("question").value = "";
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // show thinking message
+                const typingMsg = document.createElement("div");
+                typingMsg.className = "typing charly";
+                typingMsg.innerText = "CHarly is thinking...";
+                chatBox.appendChild(typingMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // fetch CHarly's response
+                const response = await fetch("/CHarly/chat", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ question })
+                });
+                const data = await response.json();
+
+                // remove typing
+                chatBox.removeChild(typingMsg);
+
+                const charlyMsg = document.createElement("div");
+                charlyMsg.className = "message charly";
+                charlyMsg.innerText = data.answer;
+                chatBox.appendChild(charlyMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+            
+        </script>
+
+   
+
+    </body>
+    </html>
+    """
+
+@app.post("/CHarly/chat")
+async def chat_with_charly(question: str = Body(..., embed=True)):
+    global split_scraped_docs
+    if not split_scraped_docs:
+        split_scraped_docs = await main()
+    answer = qa_chain.invoke(question)
+    answer_text = str(answer["result"])
+    return {"answer": answer_text}
+
