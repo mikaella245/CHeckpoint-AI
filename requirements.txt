@@ -12,3 +12,4 @@ faiss-cpu
 playwright
 pathlib
 pypdf
+chromadb
